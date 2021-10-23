@@ -36,18 +36,26 @@
         <button onclick="updateProduct()">Update Product</button>
 
     </div>
-        
+        <div>
+            <h1>Delete Product</h1>
+            <input type="number" id="delete-id" placeholder="Id" />
+            <button onclick="deleteProduct()">Delete Product</button>
+        </div>
 </body>
 </html>
 
 <script>
 
-// async function getData(){
-//     let res = await fetch(`http://localhost:3000/api/products`);
-//     let data = await res.json();
-//     console.log(data)
+async function getData(){
+    let res = await fetch(`http://localhost:3000/api/products`);
+    let data = await res.json();
+    console.log(data)
+}
+getData();
+
+// async function showData(){
+
 // }
-// getData();
 
 //---------------------------***********--------------
 
@@ -97,12 +105,17 @@ async function updateProduct(){
 
     let id = document.getElementById('update-id').value;
     let name  = document.getElementById("update_name").value;
-    let price = document.getElementById("update_price").value,
+    let price = document.getElementById("update_price").value;
 
   
-    let response = await fetch(`http://localhost:3000/api/products/${id}`,{
+    let response = await fetch(`http://localhost:3000/api/products/${id }`,{
         method : 'PUT',
-        body : JSON.stringify(data),
+        body : {
+           ' id':`${id}`,
+        //    ' name':`${name}`,
+        //     'price ': `${price}`,
+            'active' :'false'
+        },
         headers:{
             'content-type':'application/json',
         },
