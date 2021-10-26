@@ -9,53 +9,179 @@
         div{
             width: 13%;
         }
+        #container h2{
+            text-align: center;
+        }
+        #container{
+            margin: auto;
+            background-color: rgb(204, 228, 228);
+            width: 80%;
+            height: 100%;
+            padding: 20px;
+        }
+        #product , #table1{
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            margin: 20px;
+            width: 90%;
+        }
+        #product td ,#product th ,#table1  #th1{
+            padding: 8px;
+            background-color: wh;
+            width: 50%;
+            align-items: center;
+            vertical-align: middle;
+        }
+        #product tr:nth-child(even) , #tr1:nth-child(even){
+            background-color: #f2f2f2;
+        }
+        #table1 #th1_name{
+           
+        }
+        input , button{
+            background: transparent;
+            outline: none;
+            border: none;
+        }
+        button{
+            font-size: 15px;
+            text-align: center;
+        }
+        button:hover{
+            cursor: pointer;
+            color: red;
+            width: 0%;
+        }
+        .green:hover{
+            cursor: pointer;
+            color: green;
+            width: 0%;
+        }
+        .orange:hover{
+            cursor: pointer;
+            color: rgb(243, 209, 13);
+            width: 100%;
+        }
     </style>
 </head>
+
 <body>
-    <h1>Add Product</h1>
-    <div>
-        <input type="number" id="id" placeholder="Id" />
-        <input type="text" id="name" placeholder="Name" />
-        <input type="number" id="price" placeholder="Price" />
-        <button onclick="addProduct()">Add Product</button>
-    </div>
+    <div id="container">
+        <h2>Product Database</h2>
+    <table id="product">
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>PRICE</th>
+            <th>OPERATION</th>
+        </tr>
+        <tr>
+            <td>  <input type="text" id="id" placeholder="Id" /></td>
+            <td> <input type="text" id="name" placeholder="Name" /></td>
+            <td><input type="number" id="price" placeholder="Price" /></td>
+            <td> <button class="green" onclick="addProduct()">Add Product</button></td>
+        </tr>
+        <tr>
+            <td><input type="text" id="update-id" placeholder="Id" /></td>
+            <td> <input type="text" id="update_name" placeholder="Name" /></td>
+            <td><input type="number" id="update_price" placeholder="Price" /></td>
+            <td><button class="green" onclick="updateProduct()">Update Product</button></td>
 
-    <div>
+        </tr><br>
+        <tr>
+            <td><input type="text" id="product-id" placeholder="Id" /></td>
+            <td><input></td>
+            <td><input></td>
+            <td><button onclick="deleteProduct()">Delete Product</button></td>
+        </tr>
+        <tr>
+            <td><input></td>
+            <td><input></td>
+            <td><input></td>
+            <td><button class="orange" onclick="getData()">Get All Product</button></td>
 
-        <h1>Delete Product</h1>
-        <input type="number" id="product-id" placeholder="Id" />
-        <button onclick="deleteProduct()">Delete Product</button>
-
-    </div>
-
-    <div>
-        <h1>Update Product</h1>
-        <input type="number" id="update-id" placeholder="Id" />
-        <input type="text" id="update_name" placeholder="Name" />
-        <input type="number" id="update_price" placeholder="Price" />
-        <button onclick="updateProduct()">Update Product</button>
-
-    </div>
-        <div>
-            <h1>Delete Product</h1>
-            <input type="number" id="delete-id" placeholder="Id" />
-            <button onclick="deleteProduct()">Delete Product</button>
-        </div>
+        </tr><br>
+        
+    </table>
+    <div id="get_product"></div>
+</div>
 </body>
 </html>
 
 <script>
 
 async function getData(){
-    let res = await fetch(`http://localhost:3000/api/products`);
-    let data = await res.json();
-    console.log(data)
+    try{
+        let res = await fetch(`http://localhost:3000/api/products`);
+        let data = await res.json();
+        console.log(data);
+        showProduct(data);
+
+    }catch(e){
+        console.log(e);
+    }
+   
 }
-getData();
 
-// async function showData(){
 
-// }
+let parent = document.getElementById('get_product')
+
+function showProduct(products){
+    parent.innerHTML = '';
+    let h3 = document.createElement("h3");
+    h3.innerText = "Product List";
+    h3.style.color = "red";
+
+    let table = document.createElement("table");
+    table.setAttribute('id','table1')
+
+    let tr1 = document.createElement("tr");
+    tr1.setAttribute('id','tr1')
+
+    let th1 = document.createElement("th");
+    th1.innerText = "ID";
+    th1.setAttribute('id','th1')
+
+    let th2 = document.createElement("th");
+    th2.innerText = "NAME";
+    th2.setAttribute('id','th1');
+    th2.setAttribute('id','th1_name');
+
+    let th3 = document.createElement("th");
+    th3.innerText = "PRICE";
+    th2.setAttribute('id','th1')
+
+    tr1.append(th1,th2,th3);
+    table.append(tr1);
+    parent.append(h3,table);
+
+    products.forEach((p)=>{
+        console.log(p.name);
+
+        let tr2 = document.createElement("tr");
+        tr2.setAttribute('id','tr1')
+
+        let th11 = document.createElement("th");
+        th11.textContent = p.id;
+        th11.setAttribute('id','th1')
+
+        let th22 = document.createElement("th");
+        th22.innerText = p.name;
+        th22.setAttribute('id','th1')
+        th22.setAttribute('id','th1_name')
+
+        let th33 = document.createElement("th");
+        th33.innerText = p.price;
+        th33.setAttribute('id','th1')
+
+        tr2.append(th11,th22,th33)
+       
+        table.append(tr2);
+        parent.append(table)
+    })
+
+}
+
 
 //---------------------------***********--------------
 
@@ -107,15 +233,14 @@ async function updateProduct(){
     let name  = document.getElementById("update_name").value;
     let price = document.getElementById("update_price").value;
 
+    let data = {
+        name , 
+        price 
+    };
   
     let response = await fetch(`http://localhost:3000/api/products/${id }`,{
         method : 'PUT',
-        body : {
-           ' id':`${id}`,
-        //    ' name':`${name}`,
-        //     'price ': `${price}`,
-            'active' :'false'
-        },
+        body : JSON.stringify(data),
         headers:{
             'content-type':'application/json',
         },
